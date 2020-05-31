@@ -5,107 +5,50 @@
  */
 package Reciclado;
 
+import Reciclado.abstrac.AbstractEmpleado;
 import java.util.HashMap;
 
 /**
  *
  * @author Rafa
  */
-public class Chofer{
-    private int idChofer;
-    private String nombreChofer; 
-    private String rutChofer;
-    private String telefono;
-    private String email;
+public class Chofer extends AbstractEmpleado{
     private String licencia;
-    private double sueldo;
     private int cantViajes;
     private HashMap vehiculos;
+    
+    public static final double PRECIO_X_VIAJE = 5000;
+
+    public Chofer() {
+    }
 
     //Metodo Constructor para solicitud
     public Chofer(int idChofer, String nombreChofer, String licencia) {
-        this.idChofer = idChofer;
-        this.nombreChofer = nombreChofer;
+        super(idChofer, nombreChofer);
         this.licencia = licencia;
         this.vehiculos = new HashMap<Integer,Vehiculo>();
     }
     
     //Metodo Constructor para Area de Coordinacion
     public Chofer(int idChofer, String nombreChofer, String rutChofer, String telefono, String email, String licencia, double sueldo) {
-        this.idChofer = idChofer;
-        this.nombreChofer = nombreChofer;
-        this.rutChofer = rutChofer;
-        this.telefono = telefono;
-        this.email = email;
+        super(idChofer, nombreChofer,rutChofer,telefono,email,sueldo);
         this.licencia = licencia;
-        this.sueldo = sueldo;
         this.cantViajes = 0;
     }
+    
 
-    public Chofer() {
-    }
-   
     //Agregar Objeto VEHICULO al HashMap
     public Vehiculo agrgarVehiculo(Vehiculo vehiculo){
         return (Vehiculo) this.vehiculos.put(vehiculo.getPatente(), vehiculo);
     }
     
     //Metodos Geter y Seter
-
-    public int getIdChofer() {
-        return idChofer;
-    }
-
-    public void setIdChofer(int idChofer) {
-        this.idChofer = idChofer;
-    }
-
-    public String getNombreChofer() {
-        return nombreChofer;
-    }
-
-    public void setNombreChofer(String nombreChofer) {
-        this.nombreChofer = nombreChofer;
-    }
-
-    public String getRutChofer() {
-        return rutChofer;
-    }
-
-    public void setRutChofer(String rutChofer) {
-        this.rutChofer = rutChofer;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getLicencia() {
         return licencia;
     }
 
     public void setLicencia(String licencia) {
         this.licencia = licencia;
-    }
-
-    public double getSueldo() {
-        return sueldo;
-    }
-
-    public void setSueldo(double sueldo) {
-        this.sueldo = sueldo;
     }
 
     public int getCantViajes() {
@@ -124,17 +67,22 @@ public class Chofer{
         this.vehiculos = vehiculos;
     }
 
+    @Override
+    public String toString() {
+        return "Chofer{" + "licencia=" + licencia + ", cantViajes=" + cantViajes + ", vehiculos=" + vehiculos + '}';
+    }
+
+    @Override
+    public double calcularSueldo() {
+        double sueldoCalculado = (cantViajes * PRECIO_X_VIAJE) + SUELDO_BASE;
+        return sueldoCalculado;
+    }
+
     
     /**
      *
      * @return
      */
-    @Override
-    public String toString(){
-        return ("ID Chofer        : "+this.idChofer+
-              "\nNombre Chofer    : "+this.nombreChofer+
-              "\nTipo de Licencia : "+this.licencia+
-              "\n---------------------------------------\n");
-    }
+    
     
 }//Fin Clase

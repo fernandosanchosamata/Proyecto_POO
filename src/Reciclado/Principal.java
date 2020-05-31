@@ -1,5 +1,6 @@
 package Reciclado;
 
+import Reciclado.abstrac.AbstractEmpleado;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,11 +76,11 @@ public class Principal {
                     Chofer choferAux = new Chofer();
                     
                     System.out.println("Ingrese un ID para el Chofer ");
-                    choferAux.setIdChofer(teclado1.nextInt());
+                    choferAux.setId(teclado1.nextInt());
                     System.out.println("Ingrese Nombre Chofer ");
-                    choferAux.setNombreChofer(teclado1.nextLine());
+                    choferAux.setNombre(teclado1.nextLine());
                     System.out.println("Ingrese el RUT ");
-                    choferAux.setRutChofer(teclado1.nextLine());                        
+                    choferAux.setRut(teclado1.nextLine());                        
                     System.out.println("Ingrese correo electronico ");
                     choferAux.setEmail(teclado1.nextLine());  
                     System.out.println("Ingrese tefefono ");
@@ -92,7 +93,6 @@ public class Principal {
                     //Agregar un Chofer a un ArrayList
                     choferesValparaiso.add(choferAux);
                     
-                    System.out.println("El Chofer : "+choferAux.getNombreChofer()+ "  , a sido ingreado correctamente\n");  
                    
                     break;
                 case 3:
@@ -102,8 +102,8 @@ public class Principal {
                     System.out.println("\nChoferes en Planta Valparaiso :  \n");
                     while (iterador.hasNext()){
                         chofer = (Chofer) iterador.next();
-                        System.out.println("ID Chofer        : "+chofer.getIdChofer()+
-                                         "\nNombre Chofer    : "+chofer.getNombreChofer()+
+                        System.out.println("ID Chofer        : "+chofer.getId()+
+                                         "\nNombre Chofer    : "+chofer.getNombre()+
                                          "\nTipo de Licencia : "+chofer.getLicencia()+
                                          "\n---------------------------------------\n");
                     }

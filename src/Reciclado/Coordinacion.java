@@ -5,24 +5,24 @@
  */
 package Reciclado;
 
+import Reciclado.abstrac.AbstractEmpleado;
 import java.util.ArrayList;
 
 /**
  *
  * @author Rafa
  */
-public class Coordinacion{
-    private String encargado;
-    private String email;
-    private String telefono;
+public class Coordinacion extends AbstractEmpleado{
+   
     private ArrayList plantas;
     private ArrayList solicitudes;
+    private double sueldo;
+    
+    public static final double COMISION_SOLICITUD = 5000;
     
     //Metodo constructor
     public Coordinacion(String encargado, String email, String telefono) {
-        this.encargado = encargado;
-        this.email = email;
-        this.telefono = telefono;
+        super(encargado,email,telefono);
         this.plantas = new ArrayList();
         this.solicitudes = new ArrayList();
     }
@@ -38,30 +38,6 @@ public class Coordinacion{
     }
     
     //Metodos Geter y Seter
-    public String getEncargado() {
-        return encargado;
-    }
-
-    public void setEncargado(String encargado) {
-        this.encargado = encargado;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
     public ArrayList getPlantas() {
         return plantas;
     }
@@ -76,6 +52,14 @@ public class Coordinacion{
 
     public void setSolicitudes(ArrayList solicitudes) {
         this.solicitudes = solicitudes;
+    }
+
+    @Override
+    public double calcularSueldo() {
+        int numeroPlantas = plantas.size();
+        int numeroSolicitudes = plantas.size();
+        double sueldoCalculado = (numeroPlantas * COMISION_SOLICITUD) + SUELDO_BASE;
+        return sueldoCalculado;
     }
 
 }

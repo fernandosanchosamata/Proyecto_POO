@@ -6,14 +6,15 @@
 package Reciclado;
 
 import java.util.HashMap;
+import Reciclado.abstrac.IPersona;
 
 /**
  *
  * @author Rafa
  */
-public class Cliente {
-    private String nombreCliente;
-    private String rutCliente;
+public class Cliente implements IPersona{
+    private String nombre;
+    private String rut;
     private String email;
     private String direccion;
     private String tipoDomicilio;
@@ -21,8 +22,8 @@ public class Cliente {
     private HashMap solicitudes;
 
     public Cliente(String nombreCliente, String rutCliente, String email, String direccion, String tipoDomicilio, String ciudad) {
-        this.nombreCliente = nombreCliente;
-        this.rutCliente = rutCliente;
+        this.nombre = nombreCliente;
+        this.rut = rutCliente;
         this.email = email;
         this.direccion = direccion;
         this.tipoDomicilio = tipoDomicilio;
@@ -43,19 +44,19 @@ public class Cliente {
     
     
     public String getNombreCliente() {
-        return nombreCliente;
+        return nombre;
     }
 
     public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
+        this.nombre = nombreCliente;
     }
 
     public String getRutCliente() {
-        return rutCliente;
+        return rut;
     }
 
     public void setRutCliente(String rutCliente) {
-        this.rutCliente = rutCliente;
+        this.rut = rutCliente;
     }
 
     public String getEmail() {
@@ -98,8 +99,8 @@ public class Cliente {
      */
     @Override
     public String toString(){
-        return ("Nombre Cliente      : "+this.nombreCliente+
-              "\nRut del Cliente     : "+this.rutCliente+
+        return ("Nombre Cliente      : "+this.nombre+
+              "\nRut del Cliente     : "+this.rut+
               "\nCorreo electronico  : "+this.email+
               "\nDireccionCliente    : "+this.direccion+
               "\nTipo de Domicilio   : "+this.tipoDomicilio+
