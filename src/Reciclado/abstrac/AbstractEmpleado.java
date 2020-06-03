@@ -49,7 +49,8 @@ public abstract class AbstractEmpleado {
     }
 
     public int getId() {
-        return id;
+        this.id = (int) ((Math.random()*25+1));
+        return this.id;
     }
 
     public void setId(int id) {
@@ -107,6 +108,9 @@ public abstract class AbstractEmpleado {
      * Metodo abstracto calcula el sueldo por empleado
      * */
     public abstract double calcularSueldo();
+    
+    public abstract double obtenetHorario();
+    
 
     @Override
     public String toString() {

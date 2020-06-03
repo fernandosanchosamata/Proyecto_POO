@@ -6,20 +6,21 @@
 package Reciclado;
 
 import java.util.HashMap;
-import Reciclado.abstrac.IPersona;
+import java.util.Map;
 
 /**
  *
  * @author Rafa
  */
-public class Cliente implements IPersona{
+public class Cliente{
+    private int id;
     private String nombre;
     private String rut;
     private String email;
     private String direccion;
     private String tipoDomicilio;
     private String ciudad;
-    private HashMap solicitudes;
+    private Map<Integer,Solicitud> solicitudes;
 
     public Cliente(String nombreCliente, String rutCliente, String email, String direccion, String tipoDomicilio, String ciudad) {
         this.nombre = nombreCliente;
@@ -33,15 +34,24 @@ public class Cliente implements IPersona{
     public Cliente() {
     }
 
-    public HashMap getSolicitudes() {
+    public int getId() {
+        this.id = (int) ((Math.random()*25+1));
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
+    
+    public Map<Integer, Solicitud> getSolicitudes() {
         return solicitudes;
     }
 
-    public void setSolicitudes(HashMap solicitudes) {
+    public void setSolicitudes(Map<Integer, Solicitud> solicitudes) {
         this.solicitudes = solicitudes;
     }
-    
-    
     
     public String getNombreCliente() {
         return nombre;

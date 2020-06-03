@@ -25,6 +25,9 @@ public class Residuo  implements IActivo{
         toString();
     }
 
+    Residuo() {
+    }
+
     public String getTipo() {
         return tipo;
     }

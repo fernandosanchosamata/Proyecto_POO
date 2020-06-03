@@ -35,7 +35,8 @@ public class Solicitud {
     
     //Metodos Geter y Seter
     public int getIdSolicitud() {
-        return idSolicitud;
+        this.idSolicitud = (int) ((Math.random()*25+1));
+        return  this.idSolicitud;
     }
 
     public void setIdSolicitud(int idSolicitud) {

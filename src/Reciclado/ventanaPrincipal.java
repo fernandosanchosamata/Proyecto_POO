@@ -5,18 +5,12 @@
  */
 package Reciclado;
 
-import Reciclado.dao.ChoferDao;
-import Reciclado.dao.ClienteDAO;
-import Reciclado.dao.PlantaDao;
-import Reciclado.dao.ResiduoDao;
-import Reciclado.dao.SolicitudDao;
-import Reciclado.dao.VehiculoDao;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JTextField;
 
 import javax.swing.table.DefaultTableModel;
@@ -37,13 +31,15 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     //cabezera de tabla inicialmente con los nombre de columnas
     String cabezera[]={"id_solicitud","id_cliente","NOMBRE","RUT","EMAIL","DIRECCION","TIPO DOMICILIO","CIUDAD","KILOGRAMOS","PRECIO"};
     
-    
+    //ESTRUCTURAS
+    List<Cliente> listaClientes  = new ArrayList<>();
     /**
      * Creates new form ventanaPrincipal
      */
     public ventanaPrincipal() {
         initComponents();
         
+
         //se inicia el listados de datos precargados
         listarPlantas();
         listarChoferes();
@@ -159,6 +155,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         jLabel13.setText("vehiculo");
 
+        textoKilogramos.setToolTipText("");
+        textoKilogramos.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         textoKilogramos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 textoKilogramosKeyTyped(evt);
@@ -425,21 +423,24 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         cliente.setTipoDomicilio(textoTipoDomicilio.getText());
         cliente.setCiudad(textoCiudad.getText());
 
-        //guardar cliente
-        ClienteDAO clienteDao = new ClienteDAO();
-        int id = clienteDao.agregarCliente(cliente);
-        
+
         
         Solicitud solicitud = new Solicitud();
-        solicitud.setIdCliente(id);
+        
         solicitud.setCiudadSolicitud(textoCiudad.getText().toString());
         solicitud.setTipoResiduo(comboResiduo.getSelectedItem().toString());
-        solicitud.setKilogramos(Integer.parseInt(textoKilogramos.getText().equals("") ? "0" : textoKilogramos.getText()));
-        solicitud.setPrecio(Integer.parseInt(textoPrecio.getText().equals("") ? "0" : textoPrecio.getText()));
+        solicitud.setKilogramos(Integer.parseInt(textoKilogramos.getText().equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoKilogramos.getText())))));
+        solicitud.setPrecio(Integer.parseInt(textoPrecio.getText().equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoPrecio.getText())))));
         
+        Map<Integer, Solicitud> solicitudes = new HashMap<Integer, Solicitud>();
+        solicitudes.put(solicitud.getIdSolicitud(), solicitud);
+        
+        cliente.setSolicitudes(solicitudes);
+        
+        
+        listaClientes.add(cliente);
+                
         //guardar solicitud
-        SolicitudDao solicitudDAO = new SolicitudDao();
-        solicitudDAO.agregarSolicitud(solicitud);
         
         //reset
         String fila[] = new  String[cabezera.length];
@@ -527,19 +528,37 @@ public class ventanaPrincipal extends javax.swing.JFrame {
             cliente.setTipoDomicilio(tipoDomicilio);
             cliente.setCiudad(ciudad);
 
-            //guardar cliente
-            ClienteDAO clienteDao = new ClienteDAO();
-            clienteDao.actualizarCliente(rutOlder,cliente);
-
-
             Solicitud solicitud = new Solicitud();
             solicitud.setIdCliente(idClienteOlder);
-            solicitud.setKilogramos(Integer.parseInt(kilogramos.equals("") ? "0" : textoKilogramos.getText()));
-            solicitud.setPrecio(Integer.parseInt(precio.equals("") ? "0" : textoPrecio.getText()));
+            solicitud.setKilogramos(Integer.parseInt(kilogramos.equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoKilogramos.getText())))));
+            solicitud.setPrecio(Integer.parseInt(precio.equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoPrecio.getText())))));
             
-            //guardar solicitud
-            SolicitudDao solicitudDAO = new SolicitudDao();
-            solicitudDAO.actualizarSolicitud(idSolicitudOlder, solicitud);
+            
+            //buscar de la lista el clientes 
+            for (Cliente clienteBuscar : listaClientes) {
+                if (clienteBuscar.getId() == idClienteOlder) {
+                    //ahora buscar solicitud
+                    if(clienteBuscar.getSolicitudes().size() == 1){
+                        clienteBuscar.getSolicitudes().clear();
+                        clienteBuscar.getSolicitudes().put(idSolicitudOlder, solicitud);
+                    } else {
+                        //buscar la solicitud y modificarla
+                        Iterator<Integer> it = clienteBuscar.getSolicitudes().keySet().iterator();
+        
+                        while (it.hasNext()) {
+                            Integer key = it.next();
+                                if(key.equals(idSolicitudOlder)){
+                                    Solicitud get = clienteBuscar.getSolicitudes().get(key);
+                                    get = solicitud;
+                                }
+                        }
+                    }
+                    cliente.setSolicitudes(clienteBuscar.getSolicitudes());
+                    clienteBuscar = cliente;
+                }
+            }
+            
+            
             
             //actulizar tabla (grilla)
             defaultTableModel.setValueAt(idSolicitudOlder, tablaSolicitud.getSelectedRow(), 0);
@@ -559,10 +578,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         if(tablaSolicitud.getSelectedRowCount()==1){
             int idSolicitudOlder = Integer.parseInt(defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 0).toString());
             //eliminar desde la base de datos
-            SolicitudDao solicitudDao = new SolicitudDao();
-            solicitudDao.eliminarSolicitud(idSolicitudOlder);
+//            SolicitudDao solicitudDao = new SolicitudDao();
+//            solicitudDao.eliminarSolicitud(idSolicitudOlder);
             //REMOVER FILA DE LA TABLA (grilla)
             defaultTableModel.removeRow(tablaSolicitud.getSelectedRow());
+            
         }
     }//GEN-LAST:event_botonEliminarSolicitudActionPerformed
 
@@ -647,40 +667,63 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarResiduos() {
-        ResiduoDao resisuoDao = new ResiduoDao();
-        HashMap<Integer,String> residuos = new HashMap();
-        residuos = resisuoDao.obtenerResiduos();
-        for (String value : residuos.values()) {
+        Residuo metal = new Residuo("METAL","metal");
+        Residuo organico = new Residuo("ORGANICO","Organico");
+        Residuo inorganico = new Residuo("INORGANICO","INORGANICO");
+        Residuo vidrio = new Residuo("VIDRIO","VIDRIO");
+        List<Residuo> residuos = new ArrayList();
+        residuos.add(metal);
+        residuos.add(organico);
+        residuos.add(inorganico);
+        residuos.add(vidrio);
+        for (Residuo value : residuos) {
             //se agrega al componente grafico combobox de residuos
-            comboResiduo.addItem(value);
+            comboResiduo.addItem(value.getTipo());
         }
     }
     private void listarPlantas() {
-        PlantaDao plantaDao = new PlantaDao();
-        HashMap<Integer,String> plantas = new HashMap();
-        plantas = plantaDao.obtenerPlantas();
-        for (String value : plantas.values()) {
+        Planta plantaSantiago = new Planta("Planta de Santiago", "Puente alto 15646", "Santiago", 1000);
+        Planta plantaValparaiso = new Planta("Planta de Valparaiso", "Puente alto 15646", "Santiago", 2000);
+        Planta plantaViñaDelMar = new Planta("Planta de ViñaDelMar", "Puente alto 15646", "Santiago", 3000);
+        Planta plantaConcepcion = new Planta("Planta de Concepcion", "Puente alto 15646", "Santiago", 4000);
+        List<Planta> plantas = new ArrayList();
+        plantas.add(plantaSantiago);
+        plantas.add(plantaValparaiso);
+        plantas.add(plantaViñaDelMar);
+        plantas.add(plantaConcepcion);
+        for (Planta value : plantas) {
             //se agrega al componente grafico combobox de plantas
-            comboPlanta.addItem(value);
+            comboPlanta.addItem(value.getNombrePlana());
         }
     }
     private void listarChoferes() {
-        ChoferDao choferDao = new ChoferDao();
-        HashMap<Integer,String> choferes = new HashMap();
-        choferes = choferDao.obtenerChoferes();
-        for (String value : choferes.values()) {
+        Chofer chofer1 = new Chofer(1, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 50000);
+        Chofer chofer2 = new Chofer(2, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 60000);
+        Chofer chofer3 = new Chofer(3, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 70000);
+        Chofer chofer4 = new Chofer(4, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 80000);
+        List<Chofer> choferes = new ArrayList();
+        choferes.add(chofer1);
+        choferes.add(chofer2);
+        choferes.add(chofer3);
+        choferes.add(chofer4);
+        for (Chofer value : choferes) {
             //se agrega al componente grafico combobox de Choferes
-            comboChofer.addItem(value);
+            comboChofer.addItem(value.getNombre());
         }
     }
     private void listarVehiculos() {
-        VehiculoDao vehiculoDao = new VehiculoDao();
-        HashMap<Integer,String> vehiculos = new HashMap();
-        vehiculos = vehiculoDao.obtenerVehiculos();
-        for (String value : vehiculos.values()) {
-            //se agrega al componente grafico combobox de vehiculos
-            comboVehiculo.addItem(value);
+        Vehiculo vehiculo1 = new Vehiculo("ABCDEF", "SUV", "suv");
+        Vehiculo vehiculo2 = new Vehiculo("ABCDEF", "SEDAN", "suv");
+        
+        Map<Integer,Vehiculo> vehiculos = new HashMap<Integer, Vehiculo>();
+        vehiculos.put(1,vehiculo1);
+        vehiculos.put(2,vehiculo2);
+        
+        for (Map.Entry<Integer, Vehiculo> entry : vehiculos.entrySet()) {
+            Vehiculo val = entry.getValue();
+            comboVehiculo.addItem(val.getTipoVehiculo());
         }
+       
     }
     
     private void limpiarFormulario(){
@@ -710,19 +753,51 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
     private void listarSolicitudesEnTabla() {
         this.defaultTableModel = new DefaultTableModel(data, cabezera);
-        SolicitudDao solicitudDao = new SolicitudDao();
-        ResultSet result = solicitudDao.listarSolicitudes();
-        try { 
-            while(result.next()){
-                Object[] fila=new Object[cabezera.length];//array sera una de las filas de la tabla
-                for(int i=0;i<cabezera.length;i++){          
-                    fila[i]=result.getObject(i+1);
-                }
-                defaultTableModel.addRow(fila);  
-            } 
-            tablaSolicitud.setModel(defaultTableModel);
-        } catch (SQLException ex) {
-            Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        
+        List<Cliente> clientes  = this.listaClientes;
+        Object[] fila=new Object[cabezera.length];
+        for (Cliente cliente : clientes) {
+            //un cliente es una fila por cada solicitud que tenga
+            Map solicitudes = cliente.getSolicitudes();
+
+            Iterator<String> it = solicitudes.keySet().iterator();
+            
+            while (it.hasNext()) {
+                
+                Object key =  it.next();
+                Integer clave = (Integer) key;
+                
+                Solicitud solicitud = (Solicitud) solicitudes.get(key);
+                fila[0] = solicitud.getIdSolicitud();
+                fila[1] = solicitud.getIdCliente();
+                fila[2] = cliente.getNombreCliente();
+                fila[3] = cliente.getRutCliente();
+                fila[4] = cliente.getEmail();
+                fila[5] = cliente.getDireccion();
+                fila[6] = cliente.getTipoDomicilio();
+                fila[7] = cliente.getCiudad();
+                fila[8] = solicitud.getKilogramos();
+                fila[9] = solicitud.getPrecio();
+            }
+            defaultTableModel.addRow(fila);
         }
+        tablaSolicitud.setModel(defaultTableModel);
+    }
+    
+    
+    /*
+    Datos precargados residuos
+    */
+    private void loadResiduos(){
+        
+
     }
 }
+
+
+
+
+
+
+
+

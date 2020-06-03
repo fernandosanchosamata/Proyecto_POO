@@ -11,6 +11,7 @@ package Reciclado.abstrac;
  */
 public interface IActivo {
     
+    /*para hacer seguimiento del activo*/
     void calcularIdentificadorActivo();
     
 }

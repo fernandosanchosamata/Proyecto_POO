@@ -78,6 +78,11 @@ public class Chofer extends AbstractEmpleado{
         return sueldoCalculado;
     }
 
+    @Override
+    public double obtenetHorario() {
+        return 1;
+    }
+
     
     /**
      *

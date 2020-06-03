@@ -62,4 +62,9 @@ public class Coordinacion extends AbstractEmpleado{
         return sueldoCalculado;
     }
 
+    @Override
+    public double obtenetHorario() {
+        return 9;
+    }
+
 }
