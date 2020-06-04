@@ -16,6 +16,7 @@ public class Chofer extends AbstractEmpleado{
     private String licencia;
     private int cantViajes;
     private HashMap vehiculos;
+    private static final String HORARIO = "09:00 - 18:30";
     
     public static final double PRECIO_X_VIAJE = 5000;
 
@@ -78,9 +79,11 @@ public class Chofer extends AbstractEmpleado{
         return sueldoCalculado;
     }
 
+   
+
     @Override
-    public double obtenetHorario() {
-        return 1;
+    public String obtenerHorarioTrabajo() {
+        return HORARIO;
     }
 
     

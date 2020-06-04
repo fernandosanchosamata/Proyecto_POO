@@ -20,6 +20,8 @@ public class Coordinacion extends AbstractEmpleado{
     
     public static final double COMISION_SOLICITUD = 5000;
     
+    private static final String HORARIO = "09:00 - 18:00";
+    
     //Metodo constructor
     public Coordinacion(String encargado, String email, String telefono) {
         super(encargado,email,telefono);
@@ -63,8 +65,10 @@ public class Coordinacion extends AbstractEmpleado{
     }
 
     @Override
-    public double obtenetHorario() {
-        return 9;
+    public String obtenerHorarioTrabajo() {
+        return HORARIO;
     }
+
+    
 
 }

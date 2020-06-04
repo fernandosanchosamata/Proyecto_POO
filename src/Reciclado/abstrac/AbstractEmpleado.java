@@ -109,7 +109,7 @@ public abstract class AbstractEmpleado {
      * */
     public abstract double calcularSueldo();
     
-    public abstract double obtenetHorario();
+    public abstract String obtenerHorarioTrabajo();
     
 
     @Override
