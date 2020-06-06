@@ -5,19 +5,21 @@
  */
 package Reciclado;
 
+import Reciclado.abstrac.Factura;
 import java.util.HashMap;
 
 /**
  *
  * @author Rafa
  */
-public class Solicitud {
+public class Solicitud implements Factura{
     private int idSolicitud;
     private int idCliente;
     private String ciudadSolicitud;
     private String tipoResiduo;
     private float kilogramos;
     private float precio;
+    private int iva;
     
     
     public Solicitud(){}
@@ -85,12 +87,25 @@ public class Solicitud {
         this.precio = precio;
     }
     
+    
   
     public void asignarClienteASolicitid(){
         
     }
     public void asignarChoferASolicitud(){
         
+    }
+
+    
+
+    @Override
+    public float obtenerIva() {
+        return (float) (this.precio * 0.19);
+    }
+
+    @Override
+    public float obtenerTotalPreciofinal() {
+        return (float) (this.precio + (this.precio * 0.19));
     }
     
     

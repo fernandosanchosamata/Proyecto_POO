@@ -5,6 +5,8 @@
  */
 package Reciclado;
 
+import Reciclado.ventanas.VentanaEditorSolicitudes;
+import Reciclado.ventanas.VentanaEditorCliente;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     
     //ESTRUCTURAS
     List<Cliente> listaClientes  = new ArrayList<>();
+    
+    List<Cliente> listaSolicitudesClientes  = new ArrayList<>();
     /**
      * Creates new form ventanaPrincipal
      */
@@ -40,21 +44,6 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         initComponents();
         
 
-        //se inicia el listados de datos precargados
-        listarPlantas();
-        listarChoferes();
-        listarVehiculos();
-        listarResiduos();
-        listarSolicitudesEnTabla();
-        
-        
-        //MANIPULAR COLUMNAS DE TABLA, SETEAR EL ANCHO EN 0 PARA LOS IDS OCULTOS
-        TableColumn columnaIdSolicitud = tablaSolicitud.getColumn("id_solicitud");
-        TableColumn columnaIdCliente = tablaSolicitud.getColumn("id_cliente");
-        columnaIdSolicitud.setMinWidth(0);
-        columnaIdSolicitud.setMaxWidth(0);
-        columnaIdCliente.setMinWidth(0);
-        columnaIdCliente.setMaxWidth(0);
 
     }
 
@@ -68,38 +57,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        textoNombreCliente = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        comboPlanta = new javax.swing.JComboBox<>();
-        comboChofer = new javax.swing.JComboBox<>();
-        comboVehiculo = new javax.swing.JComboBox<>();
-        jLabel13 = new javax.swing.JLabel();
-        textoRut = new javax.swing.JTextField();
-        textoEmail = new javax.swing.JTextField();
-        textoDireccion = new javax.swing.JTextField();
-        textoTipoDomicilio = new javax.swing.JTextField();
-        textoCiudad = new javax.swing.JTextField();
-        textoKilogramos = new javax.swing.JTextField();
-        textoPrecio = new javax.swing.JTextField();
-        botonCrearSolicitud = new javax.swing.JButton();
-        botonLimpiar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaSolicitud = new javax.swing.JTable();
-        comboResiduo = new javax.swing.JComboBox<>();
-        botonActualizarSolicitud = new javax.swing.JButton();
-        botonEliminarSolicitud = new javax.swing.JButton();
+        panel = new javax.swing.JDesktopPane();
         barraMenu = new javax.swing.JMenuBar();
         menu = new javax.swing.JMenu();
         mCordinacion = new javax.swing.JMenuItem();
@@ -124,227 +82,15 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 255, 102));
 
-        jPanel1.setBackground(new java.awt.Color(0, 204, 51));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("GESTIÓN DE RECOLECCIÓN DE RESIDUOS");
-
-        jLabel2.setText("nombre cliente");
-
-        jLabel3.setText("rut");
-
-        jLabel4.setText("email");
-
-        jLabel5.setText("direccion");
-
-        jLabel6.setText("tipo domicilio");
-
-        jLabel7.setText("ciudad");
-
-        jLabel8.setText("tipo residuo");
-
-        jLabel9.setText("kilogramos");
-
-        jLabel10.setText("precio");
-
-        jLabel11.setText("planta");
-
-        jLabel12.setText("chofer");
-
-        jLabel13.setText("vehiculo");
-
-        textoKilogramos.setToolTipText("");
-        textoKilogramos.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        textoKilogramos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textoKilogramosKeyTyped(evt);
-            }
-        });
-
-        textoPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textoPrecioKeyTyped(evt);
-            }
-        });
-
-        botonCrearSolicitud.setBackground(new java.awt.Color(255, 255, 255));
-        botonCrearSolicitud.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        botonCrearSolicitud.setText("Crear Solicitud");
-        botonCrearSolicitud.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonCrearSolicitudActionPerformed(evt);
-            }
-        });
-
-        botonLimpiar.setText("Limpiar");
-        botonLimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonLimpiarActionPerformed(evt);
-            }
-        });
-
-        tablaSolicitud.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12"
-            }
-        ));
-        tablaSolicitud.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tablaSolicitud.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaSolicitudMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tablaSolicitud);
-
-        botonActualizarSolicitud.setBackground(new java.awt.Color(255, 255, 255));
-        botonActualizarSolicitud.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        botonActualizarSolicitud.setText("Actualizar Solicitud");
-        botonActualizarSolicitud.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonActualizarSolicitudActionPerformed(evt);
-            }
-        });
-
-        botonEliminarSolicitud.setBackground(new java.awt.Color(255, 255, 255));
-        botonEliminarSolicitud.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        botonEliminarSolicitud.setText("Eliminar Solicitud");
-        botonEliminarSolicitud.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEliminarSolicitudActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
-                                .addGap(32, 32, 32)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(textoNombreCliente)
-                                    .addComponent(textoRut)
-                                    .addComponent(textoEmail)
-                                    .addComponent(textoDireccion)
-                                    .addComponent(textoTipoDomicilio)
-                                    .addComponent(textoCiudad))
-                                .addGap(18, 18, 18))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(botonCrearSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(botonActualizarSolicitud)
-                                .addGap(18, 18, 18)
-                                .addComponent(botonEliminarSolicitud)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel11)
-                                        .addComponent(jLabel12)
-                                        .addComponent(jLabel13))
-                                    .addGap(32, 32, 32)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(comboPlanta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(comboChofer, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(comboVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(jLabel9)
-                                        .addComponent(jLabel10))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(textoKilogramos, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(textoPrecio)
-                                        .addComponent(comboResiduo, 0, 257, Short.MAX_VALUE))))
-                            .addComponent(botonLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1))
-                .addGap(53, 53, 53))
-            .addComponent(jScrollPane1)
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 911, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(textoNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(1, 1, 1)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(textoRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(textoEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(comboResiduo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(textoKilogramos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(textoPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(textoDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(textoTipoDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(textoCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(comboPlanta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(comboChofer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboVehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonCrearSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonActualizarSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonEliminarSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 627, Short.MAX_VALUE)
         );
 
         menu.setText("Menú");
@@ -378,6 +124,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         menu.add(mPlanta);
 
         mSolicitud.setText("Mostar Solicitud");
+        mSolicitud.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSolicitudActionPerformed(evt);
+            }
+        });
         menu.add(mSolicitud);
         menu.add(jSeparator1);
 
@@ -392,11 +143,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel)
         );
 
         pack();
@@ -407,184 +158,20 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mCordinacionActionPerformed
 
     private void mClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClienteActionPerformed
-        // TODO add your handling code here:
+        VentanaEditorCliente ventana = new VentanaEditorCliente(listaClientes);
+        panel.add(ventana);
+        ventana.setVisible(true);
     }//GEN-LAST:event_mClienteActionPerformed
 
     private void mChoferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mChoferActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_mChoferActionPerformed
 
-    private void botonCrearSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearSolicitudActionPerformed
-        Cliente cliente = new Cliente();
-        cliente.setNombreCliente(textoNombreCliente.getText());
-        cliente.setRutCliente(textoRut.getText());
-        cliente.setEmail(textoEmail.getText());
-        cliente.setDireccion(textoDireccion.getText());
-        cliente.setTipoDomicilio(textoTipoDomicilio.getText());
-        cliente.setCiudad(textoCiudad.getText());
-
-
-        
-        Solicitud solicitud = new Solicitud();
-        
-        solicitud.setCiudadSolicitud(textoCiudad.getText().toString());
-        solicitud.setTipoResiduo(comboResiduo.getSelectedItem().toString());
-        solicitud.setKilogramos(Integer.parseInt(textoKilogramos.getText().equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoKilogramos.getText())))));
-        solicitud.setPrecio(Integer.parseInt(textoPrecio.getText().equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoPrecio.getText())))));
-        
-        Map<Integer, Solicitud> solicitudes = new HashMap<Integer, Solicitud>();
-        solicitudes.put(solicitud.getIdSolicitud(), solicitud);
-        
-        cliente.setSolicitudes(solicitudes);
-        
-        
-        listaClientes.add(cliente);
-                
-        //guardar solicitud
-        
-        //reset
-        String fila[] = new  String[cabezera.length];
-        //nombre
-        fila[2] =  textoNombreCliente.getText().toString();
-        //rut
-        fila[3] =  textoRut.getText().toString();
-        //email
-        fila[4] =  textoEmail.getText().toString();
-        //direccion
-        fila[5] =  textoDireccion.getText().toString();
-        //tipo domicilio
-        fila[6] =  textoTipoDomicilio.getText().toString();
-        //ciudad
-        fila[7] =  comboResiduo.getSelectedItem().toString();
-        //kilogramos
-        fila[8] =  textoKilogramos.getText().toString();
-        //precio
-        fila[9] =  textoPrecio.getText().toString();
-        
-        
-        //agrega la fila (fila[]) a la tabla
-        defaultTableModel.addRow(fila);
-        //se agrega el modelo a la tabla
-        tablaSolicitud.setModel(defaultTableModel);
-        //limpia el formulario
-        limpiarFormulario();
-        //hace un refresh de la tabla para mostrar lo ultimo de la informacion
-        listarSolicitudesEnTabla();
-    }//GEN-LAST:event_botonCrearSolicitudActionPerformed
-
-    private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
-        limpiarFormulario();
-    }//GEN-LAST:event_botonLimpiarActionPerformed
-
-    private void textoKilogramosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textoKilogramosKeyTyped
-        txfSoloNumeros(evt, textoKilogramos);
-    }//GEN-LAST:event_textoKilogramosKeyTyped
-
-    private void textoPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textoPrecioKeyTyped
-        txfSoloNumeros(evt, textoPrecio);
-    }//GEN-LAST:event_textoPrecioKeyTyped
-
-    private void tablaSolicitudMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaSolicitudMouseClicked
-       //DELO MODELO DE LA TABLA OBTENER TODOS LOS VALORES
-        String nombre = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 2).toString();
-        String rut = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 3).toString();
-        String email = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 4).toString();
-        String direccion = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 6).toString();
-        String tipoDomicilio = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 6).toString();
-        String ciudad = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 7).toString();
-        String kilogramos = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 8).toString();
-        String precio = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 9).toString();
-        
-        textoNombreCliente.setText(nombre);
-        textoRut.setText(rut);
-        textoEmail.setText(email);
-        textoDireccion.setText(direccion);
-        textoTipoDomicilio.setText(tipoDomicilio);
-        textoCiudad.setText(ciudad);
-        textoKilogramos.setText(kilogramos);
-        textoPrecio.setText(precio);
-    }//GEN-LAST:event_tablaSolicitudMouseClicked
-
-    private void botonActualizarSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarSolicitudActionPerformed
-        if(tablaSolicitud.getSelectedRowCount()==1){
-            int idSolicitudOlder = Integer.parseInt(defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 0).toString());
-            int idClienteOlder = Integer.parseInt(defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 1).toString());
-            String rutOlder = defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 2).toString();
-            String nombre = textoNombreCliente.getText();
-            String rut = textoRut.getText();
-            String email = textoEmail.getText();
-            String direccion = textoDireccion.getText();
-            String tipoDomicilio = textoTipoDomicilio.getText();
-            String ciudad = textoCiudad.getText();
-            String kilogramos = textoKilogramos.getText();
-            String precio = textoPrecio.getText();
-            
-            //guardar en base de datos
-            Cliente cliente = new Cliente();
-            cliente.setNombreCliente(nombre);
-            cliente.setRutCliente(rut);
-            cliente.setEmail(email);
-            cliente.setDireccion(direccion);
-            cliente.setTipoDomicilio(tipoDomicilio);
-            cliente.setCiudad(ciudad);
-
-            Solicitud solicitud = new Solicitud();
-            solicitud.setIdCliente(idClienteOlder);
-            solicitud.setKilogramos(Integer.parseInt(kilogramos.equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoKilogramos.getText())))));
-            solicitud.setPrecio(Integer.parseInt(precio.equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoPrecio.getText())))));
-            
-            
-            //buscar de la lista el clientes 
-            for (Cliente clienteBuscar : listaClientes) {
-                if (clienteBuscar.getId() == idClienteOlder) {
-                    //ahora buscar solicitud
-                    if(clienteBuscar.getSolicitudes().size() == 1){
-                        clienteBuscar.getSolicitudes().clear();
-                        clienteBuscar.getSolicitudes().put(idSolicitudOlder, solicitud);
-                    } else {
-                        //buscar la solicitud y modificarla
-                        Iterator<Integer> it = clienteBuscar.getSolicitudes().keySet().iterator();
-        
-                        while (it.hasNext()) {
-                            Integer key = it.next();
-                                if(key.equals(idSolicitudOlder)){
-                                    Solicitud get = clienteBuscar.getSolicitudes().get(key);
-                                    get = solicitud;
-                                }
-                        }
-                    }
-                    cliente.setSolicitudes(clienteBuscar.getSolicitudes());
-                    clienteBuscar = cliente;
-                }
-            }
-            
-            
-            
-            //actulizar tabla (grilla)
-            defaultTableModel.setValueAt(idSolicitudOlder, tablaSolicitud.getSelectedRow(), 0);
-            defaultTableModel.setValueAt(idClienteOlder, tablaSolicitud.getSelectedRow(), 1);
-            defaultTableModel.setValueAt(nombre, tablaSolicitud.getSelectedRow(), 2);
-            defaultTableModel.setValueAt(rut, tablaSolicitud.getSelectedRow(), 3);
-            defaultTableModel.setValueAt(email, tablaSolicitud.getSelectedRow(), 4);
-            defaultTableModel.setValueAt(direccion, tablaSolicitud.getSelectedRow(), 5);
-            defaultTableModel.setValueAt(tipoDomicilio, tablaSolicitud.getSelectedRow(), 6);
-            defaultTableModel.setValueAt(ciudad, tablaSolicitud.getSelectedRow(), 7);
-            defaultTableModel.setValueAt(kilogramos, tablaSolicitud.getSelectedRow(), 8);
-            defaultTableModel.setValueAt(precio, tablaSolicitud.getSelectedRow(), 9);
-        }
-    }//GEN-LAST:event_botonActualizarSolicitudActionPerformed
-
-    private void botonEliminarSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarSolicitudActionPerformed
-        if(tablaSolicitud.getSelectedRowCount()==1){
-            int idSolicitudOlder = Integer.parseInt(defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 0).toString());
-            //eliminar desde la base de datos
-//            SolicitudDao solicitudDao = new SolicitudDao();
-//            solicitudDao.eliminarSolicitud(idSolicitudOlder);
-            //REMOVER FILA DE LA TABLA (grilla)
-            defaultTableModel.removeRow(tablaSolicitud.getSelectedRow());
-            
-        }
-    }//GEN-LAST:event_botonEliminarSolicitudActionPerformed
+    private void mSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSolicitudActionPerformed
+        VentanaEditorSolicitudes ventana = new VentanaEditorSolicitudes(listaClientes, listaSolicitudesClientes);
+        panel.add(ventana);
+        ventana.setVisible(true);
+    }//GEN-LAST:event_mSolicitudActionPerformed
 
     /**
      * @param args the command line arguments
@@ -623,30 +210,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
-    private javax.swing.JButton botonActualizarSolicitud;
-    private javax.swing.JButton botonCrearSolicitud;
-    private javax.swing.JButton botonEliminarSolicitud;
-    private javax.swing.JButton botonLimpiar;
-    private javax.swing.JComboBox<Object> comboChofer;
-    private javax.swing.JComboBox<Object> comboPlanta;
-    private javax.swing.JComboBox<Object> comboResiduo;
-    private javax.swing.JComboBox<Object> comboVehiculo;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem mChofer;
     private javax.swing.JMenuItem mCliente;
@@ -655,143 +219,10 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mSalir;
     private javax.swing.JMenuItem mSolicitud;
     private javax.swing.JMenu menu;
-    private javax.swing.JTable tablaSolicitud;
-    private javax.swing.JTextField textoCiudad;
-    private javax.swing.JTextField textoDireccion;
-    private javax.swing.JTextField textoEmail;
-    private javax.swing.JTextField textoKilogramos;
-    private javax.swing.JTextField textoNombreCliente;
-    private javax.swing.JTextField textoPrecio;
-    private javax.swing.JTextField textoRut;
-    private javax.swing.JTextField textoTipoDomicilio;
+    private javax.swing.JDesktopPane panel;
     // End of variables declaration//GEN-END:variables
 
-    private void listarResiduos() {
-        Residuo metal = new Residuo("METAL","metal");
-        Residuo organico = new Residuo("ORGANICO","Organico");
-        Residuo inorganico = new Residuo("INORGANICO","INORGANICO");
-        Residuo vidrio = new Residuo("VIDRIO","VIDRIO");
-        List<Residuo> residuos = new ArrayList();
-        residuos.add(metal);
-        residuos.add(organico);
-        residuos.add(inorganico);
-        residuos.add(vidrio);
-        for (Residuo value : residuos) {
-            //se agrega al componente grafico combobox de residuos
-            comboResiduo.addItem(value.getTipo());
-        }
-    }
-    private void listarPlantas() {
-        Planta plantaSantiago = new Planta("Planta de Santiago", "Puente alto 15646", "Santiago", 1000);
-        Planta plantaValparaiso = new Planta("Planta de Valparaiso", "Puente alto 15646", "Santiago", 2000);
-        Planta plantaViñaDelMar = new Planta("Planta de ViñaDelMar", "Puente alto 15646", "Santiago", 3000);
-        Planta plantaConcepcion = new Planta("Planta de Concepcion", "Puente alto 15646", "Santiago", 4000);
-        List<Planta> plantas = new ArrayList();
-        plantas.add(plantaSantiago);
-        plantas.add(plantaValparaiso);
-        plantas.add(plantaViñaDelMar);
-        plantas.add(plantaConcepcion);
-        for (Planta value : plantas) {
-            //se agrega al componente grafico combobox de plantas
-            comboPlanta.addItem(value.getNombrePlana());
-        }
-    }
-    private void listarChoferes() {
-        Chofer chofer1 = new Chofer(1, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 50000);
-        Chofer chofer2 = new Chofer(2, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 60000);
-        Chofer chofer3 = new Chofer(3, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 70000);
-        Chofer chofer4 = new Chofer(4, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 80000);
-        List<Chofer> choferes = new ArrayList();
-        choferes.add(chofer1);
-        choferes.add(chofer2);
-        choferes.add(chofer3);
-        choferes.add(chofer4);
-        for (Chofer value : choferes) {
-            //se agrega al componente grafico combobox de Choferes
-            comboChofer.addItem(value.getNombre());
-        }
-    }
-    private void listarVehiculos() {
-        Vehiculo vehiculo1 = new Vehiculo("ABCDEF", "SUV", "suv");
-        Vehiculo vehiculo2 = new Vehiculo("ABCDEF", "SEDAN", "suv");
-        
-        Map<Integer,Vehiculo> vehiculos = new HashMap<Integer, Vehiculo>();
-        vehiculos.put(1,vehiculo1);
-        vehiculos.put(2,vehiculo2);
-        
-        for (Map.Entry<Integer, Vehiculo> entry : vehiculos.entrySet()) {
-            Vehiculo val = entry.getValue();
-            comboVehiculo.addItem(val.getTipoVehiculo());
-        }
-       
-    }
-    
-    private void limpiarFormulario(){
-        textoCiudad.setText("");
-        textoDireccion.setText("");
-        textoEmail.setText("");
-        textoKilogramos.setText("");
-        textoNombreCliente.setText("");
-        textoPrecio.setText("");
-        textoRut.setText("");
-        textoTipoDomicilio.setText("");
-    }
-    
-    private void txfSoloNumeros(java.awt.event.KeyEvent evt,JTextField txf){
-        char caracter = evt.getKeyChar();
-        // Verificar si la tecla pulsada no es un digito
-        if(((caracter < '0') ||
-            (caracter > '9')) &&
-            (caracter != KeyEvent.VK_BACK_SPACE) &&
-            (caracter != '.'))
-        {
-            evt.consume();  // ignorar el evento de teclado
-        }
-         if(txf.getText().length()>9)
-             evt.consume();
-    }
-
-    private void listarSolicitudesEnTabla() {
-        this.defaultTableModel = new DefaultTableModel(data, cabezera);
-        
-        List<Cliente> clientes  = this.listaClientes;
-        Object[] fila=new Object[cabezera.length];
-        for (Cliente cliente : clientes) {
-            //un cliente es una fila por cada solicitud que tenga
-            Map solicitudes = cliente.getSolicitudes();
-
-            Iterator<String> it = solicitudes.keySet().iterator();
-            
-            while (it.hasNext()) {
-                
-                Object key =  it.next();
-                Integer clave = (Integer) key;
-                
-                Solicitud solicitud = (Solicitud) solicitudes.get(key);
-                fila[0] = solicitud.getIdSolicitud();
-                fila[1] = solicitud.getIdCliente();
-                fila[2] = cliente.getNombreCliente();
-                fila[3] = cliente.getRutCliente();
-                fila[4] = cliente.getEmail();
-                fila[5] = cliente.getDireccion();
-                fila[6] = cliente.getTipoDomicilio();
-                fila[7] = cliente.getCiudad();
-                fila[8] = solicitud.getKilogramos();
-                fila[9] = solicitud.getPrecio();
-            }
-            defaultTableModel.addRow(fila);
-        }
-        tablaSolicitud.setModel(defaultTableModel);
-    }
-    
-    
-    /*
-    Datos precargados residuos
-    */
-    private void loadResiduos(){
-        
-
-    }
+   
 }
 
 

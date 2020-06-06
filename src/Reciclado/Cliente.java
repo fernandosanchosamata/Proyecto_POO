@@ -23,6 +23,7 @@ public class Cliente{
     private Map<Integer,Solicitud> solicitudes;
 
     public Cliente(String nombreCliente, String rutCliente, String email, String direccion, String tipoDomicilio, String ciudad) {
+        this.id = 0;
         this.nombre = nombreCliente;
         this.rut = rutCliente;
         this.email = email;
@@ -35,7 +36,9 @@ public class Cliente{
     }
 
     public int getId() {
-        this.id = (int) ((Math.random()*25+1));
+        if(this.id == 0){
+            this.id = (int) ((Math.random()*25+1));
+        }
         return id;
     }
 
