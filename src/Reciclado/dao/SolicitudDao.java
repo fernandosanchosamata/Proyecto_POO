@@ -7,6 +7,9 @@ package Reciclado.dao;
 
 import Reciclado.Solicitud;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -44,6 +47,19 @@ public class SolicitudDao {
         String query = "select s.id_solicitud,c.id, c.nombre,c.rut,c.email,c.direccion,c.tipo_domicilio,c.ciudad,s.kilogramos,s.precio from cliente c inner join solicitud s on (c.id = s.id_cliente)";
         ResultSet result = database.hacerConsulta(query);
         return result;
+    }
+
+    public boolean existeClienteEnSolicitud(String rut) {
+        String query = "select * from solicitud s inner join cliente c on (s.id_cliente = c.id) where c.rut = '"+rut+"' and ROW_COUNT() <= 1;";
+        ResultSet result = database.hacerConsulta(query);
+        try {
+            if(result.first()==true){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
 }

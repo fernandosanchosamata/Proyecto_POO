@@ -854,15 +854,7 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
 
     private boolean clienteExiste() {
         String rut = textoRut.getText();
-        //obtener lista
-        List<Cliente> clientes = this.listaClientes;
-        //recorrer hasta encontrar el objeto cliente
-        for (Cliente cliente : clientes) {
-            if (cliente.getRutCliente().equals(rut)) {
-                return true;
-            }
-        }
-        return false;
+        return daoSolicitud.existeClienteEnSolicitud(rut);
     }
     private boolean solicitudExisteParaCliente() {
         String rut = textoRut.getText();
@@ -880,22 +872,25 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
     private void buscarCliente() {
         String rut = textoRut.getText();
         //obtener lista
-        List<Cliente> clientes = this.listaClientes;
-        //recorrer hasta encontrar el objeto cliente
-        for (Cliente cliente : clientes) {
-            if (cliente.getRutCliente().equals(rut)) {
-                this.textoNombreCliente.setText(cliente.getNombreCliente());
-                this.textoEmail.setText(cliente.getEmail());
-                this.textoDireccion.setText(cliente.getDireccion());
-                this.textoTipoDomicilio.setText(cliente.getTipoDomicilio());
-                this.textoCiudad.setText(cliente.getCiudad());
-            }
+        ResultSet result = clienteDao.obtenerCliente(rut);
+        try { 
+            if(result.next()){
+            String nombreDb = result.getString("nombre"); 
+            String emailDb = result.getString("email");
+            String direccionDb = result.getString("direccion");
+            String tipoDomicilioDb = result.getString("tipo_domicilio");
+            String ciudadDb = result.getString("ciudad");
+            this.textoNombreCliente.setText(nombreDb);
+            this.textoEmail.setText(emailDb);
+            this.textoDireccion.setText(direccionDb);
+            this.textoTipoDomicilio.setText(tipoDomicilioDb);
+            this.textoCiudad.setText(ciudadDb);
+            } 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    
-    
-    
     
     private void calcularPrecioFinal() {
         String precioCalculo = String.valueOf(Math.round(solicitudSelected.getPrecio()));

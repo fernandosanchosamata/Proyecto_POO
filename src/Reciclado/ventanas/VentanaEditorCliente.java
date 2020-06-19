@@ -6,15 +6,17 @@
 package Reciclado.ventanas;
 
 import Reciclado.Cliente;
-import Reciclado.Solicitud;
 import Reciclado.dao.ClienteDAO;
 import Reciclado.dao.Database;
 import Reciclado.dao.MysqlDatabase;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import Reciclado.ventanaPrincipal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -44,7 +46,7 @@ public class VentanaEditorCliente extends javax.swing.JInternalFrame {
         clienteDao = new ClienteDAO(database);
         this.listaSolicitudesClientes = listaSolicitudesClientes;
         //se inicia el listados de datos precargados
-        listarSolicitudesEnTabla();
+        listarClientesEnTabla();
         
         
         //MANIPULAR COLUMNAS DE TABLA, SETEAR EL ANCHO EN 0 PARA LOS IDS OCULTOS
@@ -303,23 +305,23 @@ public class VentanaEditorCliente extends javax.swing.JInternalFrame {
         tipoDomicilioText.setText("");
     }
  
-    private void listarSolicitudesEnTabla() {
+    private void listarClientesEnTabla() {
         this.defaultTableModel = new DefaultTableModel(data, cabezera);
         
-        List<Cliente> clientes  = this.listaSolicitudesClientes;
-        Object[] fila=new Object[cabezera.length];
-        for (Cliente cliente : clientes) {
-                fila[0] = cliente.getId();
-                fila[1] = cliente.getNombreCliente();
-                fila[2] = cliente.getRutCliente();
-                fila[3] = cliente.getEmail();
-                fila[4] = cliente.getDireccion();
-                fila[5] = cliente.getTipoDomicilio();
-                fila[6] = cliente.getCiudad();
-                defaultTableModel.addRow(fila);
-            }
+        ResultSet result = clienteDao.listarClientes();
+        try { 
+            while(result.next()){
+                Object[] fila=new Object[cabezera.length];//array sera una de las filas de la tabla
+                for(int i=0;i<cabezera.length;i++){          
+                    fila[i]=result.getObject(i+1);
+                }
+                defaultTableModel.addRow(fila);  
+            } 
             tablaUsuarios.setModel(defaultTableModel);
+        } catch (SQLException ex) {
+            Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
         
     
 }

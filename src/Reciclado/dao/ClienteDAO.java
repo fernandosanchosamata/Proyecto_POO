@@ -48,6 +48,17 @@ public class ClienteDAO {
         return false;
     }
     
+    public ResultSet listarClientes(){
+        String query = "select * from cliente";
+        ResultSet result = database.hacerConsulta(query);
+        return result;
+    }
+    
+    public ResultSet obtenerCliente(String rut){
+        String query = "select * from cliente where rut='"+rut+"'";
+        ResultSet result = database.hacerConsulta(query);
+        return result;
+    }
     
 }//Fin Clase
 
