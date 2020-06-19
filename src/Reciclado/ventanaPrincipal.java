@@ -5,6 +5,7 @@
  */
 package Reciclado;
 
+import Reciclado.dao.MysqlDatabase;
 import Reciclado.ventanas.VentanaEditorSolicitudes;
 import Reciclado.ventanas.VentanaEditorCliente;
 import java.awt.event.KeyEvent;
@@ -17,6 +18,8 @@ import javax.swing.JTextField;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import Reciclado.dao.Database;
+import Reciclado.dao.SolicitudDao;
 
 
 /**
@@ -40,6 +43,10 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form ventanaPrincipal
      */
+    
+    
+    
+    
     public ventanaPrincipal() {
         initComponents();
         
@@ -60,10 +67,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         panel = new javax.swing.JDesktopPane();
         barraMenu = new javax.swing.JMenuBar();
         menu = new javax.swing.JMenu();
-        mCordinacion = new javax.swing.JMenuItem();
         mCliente = new javax.swing.JMenuItem();
-        mChofer = new javax.swing.JMenuItem();
-        mPlanta = new javax.swing.JMenuItem();
         mSolicitud = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mSalir = new javax.swing.JMenuItem();
@@ -96,14 +100,6 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         menu.setText("Menú");
         menu.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        mCordinacion.setText("Coordinación");
-        mCordinacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mCordinacionActionPerformed(evt);
-            }
-        });
-        menu.add(mCordinacion);
-
         mCliente.setText("Mostrar Clientes");
         mCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,17 +107,6 @@ public class ventanaPrincipal extends javax.swing.JFrame {
             }
         });
         menu.add(mCliente);
-
-        mChofer.setText("Mostar Choferes");
-        mChofer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mChoferActionPerformed(evt);
-            }
-        });
-        menu.add(mChofer);
-
-        mPlanta.setText("Mostar Plantas");
-        menu.add(mPlanta);
 
         mSolicitud.setText("Mostar Solicitud");
         mSolicitud.addActionListener(new java.awt.event.ActionListener() {
@@ -153,19 +138,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mCordinacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCordinacionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mCordinacionActionPerformed
-
     private void mClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClienteActionPerformed
         VentanaEditorCliente ventana = new VentanaEditorCliente(listaClientes);
         panel.add(ventana);
         ventana.setVisible(true);
     }//GEN-LAST:event_mClienteActionPerformed
-
-    private void mChoferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mChoferActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mChoferActionPerformed
 
     private void mSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSolicitudActionPerformed
         VentanaEditorSolicitudes ventana = new VentanaEditorSolicitudes(listaClientes, listaSolicitudesClientes);
@@ -212,10 +189,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar barraMenu;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JMenuItem mChofer;
     private javax.swing.JMenuItem mCliente;
-    private javax.swing.JMenuItem mCordinacion;
-    private javax.swing.JMenuItem mPlanta;
     private javax.swing.JMenuItem mSalir;
     private javax.swing.JMenuItem mSolicitud;
     private javax.swing.JMenu menu;

@@ -85,12 +85,5 @@ public class Chofer extends AbstractEmpleado{
     public String obtenerHorarioTrabajo() {
         return HORARIO;
     }
-
-    
-    /**
-     *
-     * @return
-     */
-    
     
 }//Fin Clase

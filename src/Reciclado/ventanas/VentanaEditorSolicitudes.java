@@ -11,12 +11,23 @@ import Reciclado.Planta;
 import Reciclado.Residuo;
 import Reciclado.Solicitud;
 import Reciclado.Vehiculo;
+import Reciclado.abstrac.AbstractEmpleado;
+import Reciclado.abstrac.IActivo;
+import Reciclado.dao.ClienteDAO;
+import Reciclado.dao.Database;
+import Reciclado.dao.MysqlDatabase;
+import Reciclado.dao.SolicitudDao;
+import Reciclado.ventanaPrincipal;
 import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -44,23 +55,27 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
    Cliente clienteSelected  = new Cliente();
    Solicitud solicitudSelected  = new Solicitud();
     
+   
+   Database database;
+    SolicitudDao daoSolicitud;
+    ClienteDAO clienteDao;
     
     public VentanaEditorSolicitudes() {
     }
 
     public VentanaEditorSolicitudes(List<Cliente> listaClientes, List<Cliente> listaSolicitudesClientes) {
         initComponents();
+        this.database = new MysqlDatabase();
+        this.daoSolicitud = new SolicitudDao(database);
+        this.clienteDao = new ClienteDAO(database); 
         this.listaSolicitudesClientes = listaSolicitudesClientes;
         this.listaClientes = listaClientes;
-        
         //se inicia el listados de datos precargados
         listarPlantas();
         listarChoferes();
         listarVehiculos();
         listarResiduos();
         listarSolicitudesEnTabla();
-        
-        
         //MANIPULAR COLUMNAS DE TABLA, SETEAR EL ANCHO EN 0 PARA LOS IDS OCULTOS
         TableColumn columnaIdSolicitud = tablaSolicitud.getColumn("id_solicitud");
         TableColumn columnaIdCliente = tablaSolicitud.getColumn("id_cliente");
@@ -518,6 +533,7 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
             return;
         }
 
+        
         Cliente cliente = new Cliente();
         cliente.setNombreCliente(textoNombreCliente.getText());
         cliente.setRutCliente(textoRut.getText());
@@ -526,22 +542,21 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
         cliente.setTipoDomicilio(textoTipoDomicilio.getText());
         cliente.setCiudad(textoCiudad.getText());
         
-        this.listaClientes.add(cliente);
+        //guardar cliente
+        
+        int id = clienteDao.agregarCliente(cliente);
 
         Solicitud solicitud = new Solicitud();
+        solicitud.setIdCliente(id);
         solicitud.setCiudadSolicitud(textoCiudad.getText().toString());
         solicitud.setTipoResiduo(comboResiduo.getSelectedItem().toString());
         solicitud.setKilogramos(Integer.parseInt(textoKilogramos.getText().equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoKilogramos.getText())))));
         solicitud.setPrecio(Integer.parseInt(textoPrecio.getText().equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoPrecio.getText())))));
 
-        Map<Integer, Solicitud> solicitudes = new HashMap<Integer, Solicitud>();
-        solicitudes.put(solicitud.getIdSolicitud(), solicitud);
-
-        cliente.setSolicitudes(solicitudes);
-
-        listaSolicitudesClientes.add(cliente);
-
         //guardar solicitud
+        
+        daoSolicitud.agregarSolicitud(solicitud);
+        
 
         //reset
         String fila[] = new  String[cabezera.length];
@@ -596,8 +611,8 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
         textoKilogramos.setText(kilogramos);
         textoPrecio.setText(precio);
         
-        this.obtenerClienteSelected();
-        this.obtenerSolicitudSelected();
+//        this.obtenerClienteSelected();
+//        this.obtenerSolicitudSelected();
         this.calcularPrecioFinal();
     }//GEN-LAST:event_tablaSolicitudMouseClicked
 
@@ -623,35 +638,16 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
             cliente.setDireccion(direccion);
             cliente.setTipoDomicilio(tipoDomicilio);
             cliente.setCiudad(ciudad);
+            
+            //guardar cliente
+            clienteDao.actualizarCliente(rutOlder,cliente);
 
             Solicitud solicitud = new Solicitud();
             solicitud.setIdCliente(idClienteOlder);
             solicitud.setKilogramos(Integer.parseInt(kilogramos.equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoKilogramos.getText())))));
             solicitud.setPrecio(Integer.parseInt(precio.equals("") ? "0" : String.valueOf(Math.round(Float.parseFloat(textoPrecio.getText())))));
-
-            //buscar de la lista el clientes
-            for (Cliente clienteBuscar : listaSolicitudesClientes) {
-                if (clienteBuscar.getId() == idClienteOlder) {
-                    //ahora buscar solicitud
-                    if(clienteBuscar.getSolicitudes().size() == 1){
-                        clienteBuscar.getSolicitudes().clear();
-                        clienteBuscar.getSolicitudes().put(idSolicitudOlder, solicitud);
-                    } else {
-                        //buscar la solicitud y modificarla
-                        Iterator<Integer> it = clienteBuscar.getSolicitudes().keySet().iterator();
-
-                        while (it.hasNext()) {
-                            Integer key = it.next();
-                            if(key.equals(idSolicitudOlder)){
-                                Solicitud get = clienteBuscar.getSolicitudes().get(key);
-                                get = solicitud;
-                            }
-                        }
-                    }
-                    cliente.setSolicitudes(clienteBuscar.getSolicitudes());
-                    clienteBuscar = cliente;
-                }
-            }
+            
+            daoSolicitud.actualizarSolicitud(idSolicitudOlder, solicitud);
 
             //actulizar tabla (grilla)
             defaultTableModel.setValueAt(idSolicitudOlder, tablaSolicitud.getSelectedRow(), 0);
@@ -671,8 +667,7 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
         if(tablaSolicitud.getSelectedRowCount()==1){
             int idSolicitudOlder = Integer.parseInt(defaultTableModel.getValueAt(tablaSolicitud.getSelectedRow(), 0).toString());
             //eliminar desde la base de datos
-            //            SolicitudDao solicitudDao = new SolicitudDao();
-            //            solicitudDao.eliminarSolicitud(idSolicitudOlder);
+            daoSolicitud.eliminarSolicitud(idSolicitudOlder);
             //REMOVER FILA DE LA TABLA (grilla)
             defaultTableModel.removeRow(tablaSolicitud.getSelectedRow());
 
@@ -753,14 +748,15 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
         Residuo organico = new Residuo("ORGANICO","Organico");
         Residuo inorganico = new Residuo("INORGANICO","INORGANICO");
         Residuo vidrio = new Residuo("VIDRIO","VIDRIO");
-        List<Residuo> residuos = new ArrayList();
+        List<IActivo> residuos = new ArrayList();
         residuos.add(metal);
         residuos.add(organico);
         residuos.add(inorganico);
         residuos.add(vidrio);
-        for (Residuo value : residuos) {
+        for (IActivo value : residuos) {
             //se agrega al componente grafico combobox de residuos
-            comboResiduo.addItem(value.getTipo());
+            Residuo residuo = (Residuo) value;
+            comboResiduo.addItem(residuo.getTipo());
         }
     }
     private void listarPlantas() {
@@ -783,12 +779,12 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
         Chofer chofer2 = new Chofer(2, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 60000);
         Chofer chofer3 = new Chofer(3, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 70000);
         Chofer chofer4 = new Chofer(4, "Jose", "456456-5", "54846546", "correo1@correo.com", "ABCDE", 80000);
-        List<Chofer> choferes = new ArrayList();
+        List<AbstractEmpleado> choferes = new ArrayList();
         choferes.add(chofer1);
         choferes.add(chofer2);
         choferes.add(chofer3);
         choferes.add(chofer4);
-        for (Chofer value : choferes) {
+        for (AbstractEmpleado value : choferes) {
             //se agrega al componente grafico combobox de Choferes
             comboChofer.addItem(value.getNombre());
         }
@@ -836,38 +832,23 @@ public class VentanaEditorSolicitudes extends javax.swing.JInternalFrame {
          if(txf.getText().length()>9)
              evt.consume();
     }
-
+    
     private void listarSolicitudesEnTabla() {
         this.defaultTableModel = new DefaultTableModel(data, cabezera);
         
-        List<Cliente> clientes  = this.listaSolicitudesClientes;
-        Object[] fila=new Object[cabezera.length];
-        for (Cliente cliente : clientes) {
-            //un cliente es una fila por cada solicitud que tenga
-            Map solicitudes = cliente.getSolicitudes();
-
-            Iterator<String> it = solicitudes.keySet().iterator();
-            
-            while (it.hasNext()) {
-                
-                Object key =  it.next();
-                Integer clave = (Integer) key;
-                
-                Solicitud solicitud = (Solicitud) solicitudes.get(key);
-                fila[0] = solicitud.getIdSolicitud();
-                fila[1] = solicitud.getIdCliente();
-                fila[2] = cliente.getNombreCliente();
-                fila[3] = cliente.getRutCliente();
-                fila[4] = cliente.getEmail();
-                fila[5] = cliente.getDireccion();
-                fila[6] = cliente.getTipoDomicilio();
-                fila[7] = cliente.getCiudad();
-                fila[8] = solicitud.getKilogramos();
-                fila[9] = solicitud.getPrecio();
-            }
-            defaultTableModel.addRow(fila);
+        ResultSet result = daoSolicitud.listarSolicitudes();
+        try { 
+            while(result.next()){
+                Object[] fila=new Object[cabezera.length];//array sera una de las filas de la tabla
+                for(int i=0;i<cabezera.length;i++){          
+                    fila[i]=result.getObject(i+1);
+                }
+                defaultTableModel.addRow(fila);  
+            } 
+            tablaSolicitud.setModel(defaultTableModel);
+        } catch (SQLException ex) {
+            Logger.getLogger(ventanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        tablaSolicitud.setModel(defaultTableModel);
     }
     
 

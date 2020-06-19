@@ -86,17 +86,6 @@ public class Solicitud implements Factura{
     public void setPrecio(float precio) {
         this.precio = precio;
     }
-    
-    
-  
-    public void asignarClienteASolicitid(){
-        
-    }
-    public void asignarChoferASolicitud(){
-        
-    }
-
-    
 
     @Override
     public float obtenerIva() {

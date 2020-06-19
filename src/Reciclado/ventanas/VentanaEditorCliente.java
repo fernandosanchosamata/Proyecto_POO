@@ -7,6 +7,9 @@ package Reciclado.ventanas;
 
 import Reciclado.Cliente;
 import Reciclado.Solicitud;
+import Reciclado.dao.ClienteDAO;
+import Reciclado.dao.Database;
+import Reciclado.dao.MysqlDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +21,7 @@ import javax.swing.table.TableColumn;
 
 /**
  *
- * @author Fernando Sancho
+ * @author Rafa
  */
 public class VentanaEditorCliente extends javax.swing.JInternalFrame {
 
@@ -32,8 +35,13 @@ public class VentanaEditorCliente extends javax.swing.JInternalFrame {
     String cabezera[]={"id_cliente","NOMBRE","RUT","EMAIL","DIRECCION","TIPO DOMICILIO","CIUDAD"};
     
     
+    ClienteDAO clienteDao;
+    Database database;
+    
     public VentanaEditorCliente(List<Cliente> listaSolicitudesClientes) {
         initComponents();
+        database = new MysqlDatabase();
+        clienteDao = new ClienteDAO(database);
         this.listaSolicitudesClientes = listaSolicitudesClientes;
         //se inicia el listados de datos precargados
         listarSolicitudesEnTabla();
@@ -217,14 +225,8 @@ public class VentanaEditorCliente extends javax.swing.JInternalFrame {
         cliente.setTipoDomicilio(tipoDomicilioText.getText());
         cliente.setCiudad(ciudadText.getText());
 
+        clienteDao.agregarCliente(cliente);
         
-        Map<Integer, Solicitud> solicitudes = new HashMap<Integer, Solicitud>();
-        
-        
-        cliente.setSolicitudes(solicitudes);
-        
-        
-        listaSolicitudesClientes.add(cliente);
                 
         
         //reset

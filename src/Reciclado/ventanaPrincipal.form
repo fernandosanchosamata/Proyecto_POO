@@ -27,14 +27,6 @@
             </Property>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mCordinacion">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Coordinaci&#xf3;n"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mCordinacionActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mCliente">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Mostrar Clientes"/>
@@ -42,19 +34,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mClienteActionPerformed"/>
               </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mChofer">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Mostar Choferes"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mChoferActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mPlanta">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Mostar Plantas"/>
-              </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mSolicitud">
               <Properties>
